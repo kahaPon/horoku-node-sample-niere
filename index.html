@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
   <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
   <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
+  <link rel="stylesheet" href="style.css">
  
   <title>Simple Chat App</title>
 </head>
@@ -82,9 +83,9 @@
 
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script>
-      var myName = "";
-var users = [""];
-$(document).ready(function () {
+    var myName = "";
+    var users = [""];
+    $(document).ready(function () {
     var socket = io.connect('http://localhost:3000')
     socket.emit("request_user", "REQUEST");
     var message = $("#message");

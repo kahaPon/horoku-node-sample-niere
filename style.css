@@ -1,0 +1,134 @@
+.ownMessage{
+    text-align:left!important;
+    margin-left: 20px!important;
+    padding: 10px;
+    text-indent: 20px;
+  }
+  .othersMessage{
+    text-align:left!important;
+    margin-left: 20px!important;
+    text-indent: 20px;
+    padding:10px;
+  }
+  .speech-bubble {
+    position: relative;
+    background: #ff80ff;
+    color: black;
+    font-family: Arial;
+    font-size: 20px;
+    line-height: 120px;
+    width: 300px;
+    height: 90px;
+    border-radius: 10px;
+	padding: 0px;
+	margin: 10px auto;
+	margin-right: 100%
+}
+.speech-bubble:after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 0;
+    z-index: 1;
+    border-style: solid;
+    border-width: 0 0 20px 20px;
+    border-color: transparent transparent #ff80ff transparent;
+    top: 50%;
+    left: -20px;
+    margin-top: -10px;
+}
+
+  /* .speech-bubble {
+	position: relative;
+	background: #ff80ff;
+	border-radius: .4em;
+	width: 300px;
+	float: right;
+	text-align: left;
+}
+
+.speech-bubble:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 23px solid transparent;
+	border-right-color: #ff80ff;
+	border-left: 0;
+	border-bottom: 0;
+	margin-top: -9px;
+	margin-left: -20px;
+	align-self: left;
+} */
+
+.speech-bubble1 {
+    position: relative;
+    background: #00C700;
+    color: #FFFFFF;
+    font-family: Arial;
+    font-size: 20px;
+    line-height: 120px;
+     
+    width: 300px;
+    height: 90px;
+    border-radius: 10px;
+	padding: 0px;
+	float: right;
+	margin: 10px auto;
+	margin-left: 100%;
+}
+.speech-bubble1:after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 0;
+    z-index: 1;
+    border-style: solid;
+    border-width: 20px 0 0 20px;
+    border-color: transparent transparent transparent #00C700;
+    top: 50%;
+    right: -20px;
+    margin-top: -10px;
+}
+/* .speech-bubble1 {
+	position: relative;
+	background: #53df1c;
+	border-radius: .4em;
+	width: 300px;
+	float: right;
+	text-align: left;
+}
+
+.speech-bubble1:after {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 20px solid transparent;
+	border-left-color: #53df1c;
+	border-right: 0;
+	border-bottom: 0;
+	margin-top: -10px;
+	margin-right: -20px;
+	align-self: right;
+} */
+
+  #inbox{
+    height: 300px;
+	overflow-y: auto;
+	padding: 50px;
+  }
+   body{
+     background-image: url(https://media.istockphoto.com/photos/blue-soft-background-picture-id689752378?k=6&m=689752378&s=612x612&w=0&h=6KFi1iqcd5LVwA0bzgrdF1jzSK2fS6hfBqAdcNJnB-c=);
+     background-repeat: no-repeat;
+     background-size: cover;
+   }
+   
+   .card{
+     border-radius: 20px;
+   }
+	 
