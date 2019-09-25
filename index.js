@@ -1,59 +1,52 @@
+
 var app = require('express')();
-var express = require('express');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 9000;
+var users= [];
+var connections = [];
 
 
-app.get('/', function (req, res) {
+
+
+app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
-app.use(express.static('public'));
+io.sockets.on('connection', function(socket){
+	connections.push(socket);
 
-io.on('connection', function (socket) {
-  socket.on('chat message', function (msg) {
-    io.emit('chat message', msg);
-    console.log(msg)
-  });
+	socket.on('disconnect', function(data){
+		users.splice(users.indexOf(socket.username), 1);
+		updateUsernames();
+		connections.splice(connections.indexOf(socket) , 1);
+		
+	});
+
+	//send message
+	socket.on('send message',function(data){
+		io.sockets.emit('new message' , {msg: data, user: socket.username});
+		console.log( socket.username);
+		
+	});
+
+	socket.on('typing', function(username) {
+		socket.broadcast.emit('typing', username);
+	})
+
+	// new user
+	socket.on('new user',function(data,callback){
+		callback(true);
+		socket.username = data;
+		users.push(socket.username);
+		updateUsernames();
+	});
+
+	function updateUsernames(){
+		io.sockets.emit('get users', users);
+	}
 });
 
-
-http.listen(port, function () {
+http.listen(port, function(){
   console.log('listening on *:' + port);
 });
-
-
-//listen on every connection
-io.on('connection', (socket) => {
-  console.log('New user connected')
-  
-  //default username
-  socket.username = "Anonymous"
-
-  //listen on change_username
-  socket.on('change_username', (data) => {
-    socket.username = data.username
-    console.log(socket.username)
-  })
-
-  socket.on('log_in', (data) => {
-    io.sockets.emit('log_in', data);
-  })
-
-  socket.on('request_user', (data) => {
-    io.sockets.emit('request_user', data);
-  })
-
-  //listen on new_message
-  socket.on('new_message', (data) => {
-    //broadcast the new message
-    io.sockets.emit('new_message', data);
-  })
-
-  //listen on typing
-  socket.on('typing', (data) => {
-    socket.broadcast.emit('typing', data);
-  })
-
-})

@@ -1,161 +1,273 @@
 <html>
 
 <head>
-  <meta http-equiv="Content-Type" const="text/html;charset=UTF-8" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
-  <link rel="stylesheet" href="style.css">
-  <title>Simple Chat App</title>
+  <title>Socket.IO chat</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        color:black;
+        background-color: gray;
+        
+      }
+     
+
+      .chat-popup {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        right: 15px;
+        border: 1px solid #f1f1f1;
+        z-index: 1;
+      }
+
+      .form-container {
+         padding: 3px; 
+        background-color:gray;
+        height: 20px;
+        
+      }
+
+      li {
+        list-style-type: none;
+      }
+
+
+      .form-container .btn {
+        background-color:black;
+        color: white;
+        margin-left: 885px;
+        border: none;
+        cursor: pointer;
+        width: 10%;
+        margin-bottom:10px;
+        opacity: 0.8;
+        margin-top:-54px ;
+      }
+
+      .form-container .btn:hover, .open-button:hover {
+        opacity: 1;
+      }
+
+      header{
+        background-color: khaki;
+        height: 20%;
+        position: fixed;
+        width: 100%;
+        z-index: 1;
+
+      }
+      h1{
+        margin-top: 5%;
+        font-size: 30px;
+    
+      }
+      i{
+        color: black;
+
+      }
+      img{
+        height: 130px;
+        width : 130px;
+        margin-left: 600px;
+        margin-top: -80px;
+      }
+
+      #username{
+        width: 100%;
+        padding: 15px 32px;
+        margin-bottom:10px;
+      }
+      #userForm{
+        margin-left: 40%;
+        margin-right: 40%;
+        margin-top: 20%;
+        text-align: center;
+        background-color:gray;
+      }
+
+      #ok{
+        background-color:black;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        margin-bottom:10px;
+        opacity: 0.8;
+      }
+      .well{
+        color:black;
+        background-color: gray;
+        margin-top: 5% ;
+        
+        
+      }
+      h3 {
+        color:black;
+        background-color: gray;
+        margin-top: 30% ; 
+      }
+       #divmessages{
+        margin-top: 8%;
+       }
+        
+
+      
+      .test{
+        margin-left: 300px;
+        min-height: 20px;
+        padding: 19px;
+        margin-bottom: 20px;
+        background-color: pink;
+        border: 1px solid #e3e3e3;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.05);       
+      }
+      .test2{
+        margin-right: 300px;
+        min-height: 20px;
+        padding: 19px;
+        margin-bottom: 20px;
+        background-color: dodgerblue;
+        border: 1px solid #e3e3e3;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.05);       
+      }
+    </style>
 </head>
 
-<body><br>
-  <center>
-    <header>
-      <h1>Let's Chat</h1>
-    </header>
-  </center>
+<body>
+  <header>
+    <center>
+      <h1>
+        <i>MEET YOUR DESTINY</i>
+        <img src="https://images.vexels.com/media/users/3/129759/isolated/preview/e57821f1317893d1c2d8e184d4f9d595-chat-bubble-icon-by-vexels.png" />
+      </h1>
+    </center>
+  </header><br><br><br>
+  <div class="container">
 
-  <center>
-    <div class="modal active" id="modal-id">
-      <a href="#close" class="modal-overlay" aria-label="Close"></a>
-      <div class="modal-container">
-        <div class="modal-header">
-          <div class="modal-title h5">Enter Username</div>
-        </div>
-        <div class="modal-body">
-          <div class="content">
-            <div id="change_username" class="form-group">
-              <input id="username" type="text" class="form-input" /><br>
-              <button id="btnUsername" class="btn" type="button">Set username</button>
-            </div>
+    <div id="userFormArea" class="row">
+      <div class="col-md-12">
+        <form id="userForm">
+          <div class="form-group">
+            <label>Enter a UserName:</label>
+            <input class="form-control" autocomplete= "off" id="username">
+            <br>
+            <input id="ok" type="submit" class="btn btn-primary" value="Save">
           </div>
-        </div>
-        <div class="modal-footer">
-        </div>
+        </form>
       </div>
     </div>
-  </center>
-  <table class="table">
-    <tr>
-      <td class="col-3">
-        <div class="card">
-          <center>
-            <header>
-              <h2>Inbox</h2>
-            </header>
-            <div id="Name"></div>
-          </center>
 
-          <section id="inbox">
-            <section id="feedback"></section>
-          </section>
-
-        </div><br>
-        <div class="card">
-          <div class="inpMessage">
-            <center>
-              <section id="input_zone">
-                <input id="message" class="vertical-align form-input" type="text" /><br>
-                <button id="btnMessage" class="vertical-align btn" type="button">Send</button><br><br>
-              </section>
-            </center>
-          </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="well">
+          <h3>Online Users</h3>
+          <ul class="list-group" id="users"></ul>
         </div>
-      </td>
-      <td class="col-3">
-        <div class="card">
-          <center>
-            <header>
-              <h2>Active Users</h2>
-            </header>
-          </center>
-          <span id="users"></span>
-        </div>
-      </td>
-    </tr>
-  </table>
+      </div>
+      <div class="col-md-8" id="divmessages">
+        <h1>Messages:</h1>
+      </div>
+    </div>
 
-  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-  <script>
-    
-$(document).ready(function () {
-    var socket = io.connect('http://localhost:3000')
-    socket.emit("request_user", "REQUEST");
-    var message = $("#message");
-    var username = $("#username");
-    var btnMessage = $("#btnMessage");
-    var btnUsername = $("#btnUsername");
-    var inbox = $("#inbox");
-    var feedback = $("#feedback");
-    var interval = 0;
-    var myName = "";
-    var users = [""];
+    <div class="chat-popup" id="chat">
+      <div id="type"></div>
+      <form id="messageForm" class="form-container">
+        <input type="text" autocomplete= "off" class="form-control" id="message" placeholder="Type message here..." size="200">
+        <br>
+        <input type="submit" class="btn btn-primary" value="Send">
+      </form>
+    </div>
 
-    //close modal
-    $(document).delegate('#btnUsername', 'click', function (e) {
-        myName = $('#username').val();
-        if (myName != "" && !users.includes(myName)) {
-            users.push(myName);
-            socket.emit("log_in", myName);
-            $(this).closest('.modal').removeClass('active');
-            e.preventDefault();
-        } else {
-            alert("Username already used!!!");
-        }
-    });
-    socket.on('request_user', function (user) {
-        socket.emit("log_in", myName);
-    })
-
-    socket.on('log_in', function (user) {
-        if (!users.includes(user)) {
-            users.push(user);
-            $('#users').append('<p> 🔵 <i>' + user + '</p>');
-        }
-        // socket.emit("log_in", myName);
-    })
-
-    //Emit message
-    btnMessage.click(function () {
-        socket.emit('new_message', { username: myName, message: $('#message').val() });
-        message.val('');
-    });
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      $(function () {
+        var socket = io.connect();
+        var messageForm = $('#messageForm');
+        var message = $('#message');
+        var userFormArea = $('#userFormArea');
+        var userForm = $('#userFormArea');
+        var users = $('#users');
+        var username = $('#username');
+        var messages = $('#divmessages');
+        var interval = 0;
+        var myname = "";
 
 
-    //Listen on new_message
-    socket.on("new_message", (data) => {
-        feedback.html('');
-        if (data.username == myName) {
-            $("#inbox").append("<p class='speech-bubble1 ownMessage' id=''>" + "Me : " + data.message + "</p><br clear='all'>")
-        }else{
-            $("#inbox").append("<p class='speech-bubble othersMessage' id=''>" + data.username + ": " + data.message + "</p><br clear='all'>")
-        }
-        // $("#inbox").scrollTop($("#inbox")[0].scrollHeight);
-    })
+        $(".well").hide();
+        $(messages).hide();
 
-    //Emit a username
-    btnUsername.click(function () {
-        socket.emit('change_username', { username: username.val() })
-        $('#Name').append(username.val());
-    })
+        messageForm.submit(function (e) {
+          e.preventDefault();
+          socket.emit('send message', message.val());
+          message.val('');
+          return false;
+        });
 
-    //Emit typing
-    message.on("keydown", () => {
-        socket.emit('typing', myName)
-    })
 
-    //Listen on typing
-    socket.on('typing', (data) => {
-        clearInterval(interval);
-        feedback.html("<p><i>" + data + " is typing a message..." + "</i></p>");
-        interval = setInterval(function(){
-            feedback.html('');
-        }, 2000);
-    });
-});
-  </script>
+
+        socket.on('typing', function (data) {
+          $("#type").remove();
+          clearInterval(interval);
+          $('#divmessages').append('<div id = "type" >' + data + ' is typing..</div>');
+
+          interval = setInterval(function () {
+            $("#type").remove();
+          }, 2000);
+
+
+        })
+
+        socket.on('new message', function (data) {
+          $("#type").remove();
+          if (data.user == username) {
+            messages.append('<div class =" test" ><strong>  ' + data.user + '</strong>: ' + data.msg + '</div>')
+          } else {
+            messages.append('<div class = "test2" ><strong>' + data.user + '</strong>: ' + data.msg + '</div>')
+          }
+        });
+
+        userForm.submit(function (e) {
+          e.preventDefault();
+          myname = username.val();
+          socket.emit('new user', myname, function (data) {
+            if (data) {
+              userFormArea.hide();
+              $(".chat-popup").show();
+              $(".well").show();
+              $(messages).show();
+
+            }
+
+          });
+          username = username.val();
+
+        });
+
+        $("#message").keydown(function () {
+          socket.emit('typing', myname);
+        })
+
+        socket.on('get users', function (data) {
+          var html = "";
+          for (i = 0; i < data.length; i++) {
+            html += '<li class = "list-group-item">' + data[i] + ' is active' + '</li>';
+          }
+          users.html(html);
+        });
+      });
+
+
+    </script>
 </body>
 
 </html>
