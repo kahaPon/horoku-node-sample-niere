@@ -79,8 +79,7 @@
 
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script>
-    var myName = "";
-var users = [""];
+    
 $(document).ready(function () {
     var socket = io.connect('http://localhost:3000')
     socket.emit("request_user", "REQUEST");
@@ -91,6 +90,8 @@ $(document).ready(function () {
     var inbox = $("#inbox");
     var feedback = $("#feedback");
     var interval = 0;
+    var myName = "";
+    var users = [""];
 
     //close modal
     $(document).delegate('#btnUsername', 'click', function (e) {
