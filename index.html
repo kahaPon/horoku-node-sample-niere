@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" const="text/html;charset=UTF-8" />
+  <link href="http://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet" type="text/css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
+ 
+  <title>Simple Chat App</title>
+</head>
+
+<body><br>
+  <center>
+    <header>
+      <h1>ChatTa</h1>
+    </header>
+  </center>
+
+  <center>
+    <div class="modal active" id="modal-id">
+      <a href="#close" class="modal-overlay" aria-label="Close"></a>
+      <div class="modal-container">
+        <div class="modal-header">
+          <div class="modal-title h5">Enter Username</div>
+        </div>
+        <div class="modal-body">
+          <div class="content">
+            <div id="change_username" class="form-group">
+              <input id="username" type="text" class="form-input" /><br>
+              <button id="btnUsername" class="btn" type="button">Set username</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </center>
+  <table class="table">
+    <tr>
+        <td class="col-2">
+        <div class="card">
+          <center>
+            <header>
+              <h2>Active Users</h2>
+            </header>
+          </center>
+          <span id="users"></span>
+        </div>
+      </td>
+      <td class="col-4">
+        <div class="card">
+          <center>
+            <header>
+              <h2>Inbox</h2>
+            </header>
+            <div id="Name"></div>
+          </center>
+
+          <section id="inbox">
+            <section id="feedback"></section>
+          </section>
+
+        </div><br>
+        <div class="card">
+          <div class="inpMessage">
+            <center>
+              <section id="input_zone">
+                <input id="message" class="vertical-align form-input" type="text" /><br>
+                <button id="btnMessage" class="vertical-align btn" type="button">Send</button><br><br>
+              </section>
+            </center>
+          </div>
+        </div>
+      </td>
+      
+    </tr>
+  </table>
+
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script>
+      var myName = "";
+var users = [""];
+$(document).ready(function () {
+    var socket = io.connect('http://localhost:3000')
+    socket.emit("request_user", "REQUEST");
+    var message = $("#message");
+    var username = $("#username");
+    var btnMessage = $("#btnMessage");
+    var btnUsername = $("#btnUsername");
+    var inbox = $("#inbox");
+    var feedback = $("#feedback");
+    var interval = 0;
+
+    //close modal
+    $(document).delegate('#btnUsername', 'click', function (e) {
+        myName = $('#username').val();
+        if (myName != "" && !users.includes(myName)) {
+            users.push(myName);
+            socket.emit("log_in", myName);
+            $(this).closest('.modal').removeClass('active');
+            e.preventDefault();
+        } else {
+            alert("Username already used!!!");
+        }
+    });
+    socket.on('request_user', function (user) {
+        socket.emit("log_in", myName);
+    })
+
+    socket.on('log_in', function (user) {
+        if (!users.includes(user)) {
+            users.push(user);
+            $('#users').append('<p> 🔵 <i>' + user + '</p>');
+        }
+        // socket.emit("log_in", myName);
+    })
+
+    //Emit message
+    btnMessage.click(function () {
+        socket.emit('new_message', { username: myName, message: $('#message').val() });
+        message.val('');
+    });
+
+
+    //Listen on new_message
+    socket.on("new_message", (data) => {
+        feedback.html('');
+        if (data.username == myName) {
+            inbox.append("<p class='speech-bubble1' id='ownMessage'>" + "Me : " + data.message + "</p>")
+        }else{
+            inbox.append("<p class='speech-bubble' id='othersMessage'>" + data.username + ": " + data.message + "</p>")
+        }
+        $("#inbox").scrollTop($("#inbox")[0].scrollHeight);
+    })
+
+    //Emit a username
+    btnUsername.click(function () {
+        socket.emit('change_username', { username: username.val() })
+    })
+
+    //Emit typing
+    message.on("keydown", () => {
+        socket.emit('typing', myName)
+    })
+
+    //Listen on typing
+    socket.on('typing', (data) => {
+        clearInterval(interval);
+        feedback.html("<p><i>" + data + " is typing a message..." + "</i></p>");
+        interval = setInterval(function(){
+            feedback.html('');
+        }, 2000);
+    })
+});
+  </script>
+</body>
+
+</html>
