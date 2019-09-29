@@ -1,29 +1,31 @@
 {
-  "name": "horoku-node-sample-niere",
+  "name": "heroku-sample",
   "version": "1.0.0",
-  "description": "",
+  "description": "a sample application to deploy to heroku",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^1.7.4"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kahaPon/horoku-node-sample-niere.git"
+    "url": "git+https://github.com/junreycloudstrife/heroku-sample.git"
   },
   "keywords": [
-    "chatTa"
+    "heroku",
+    "deploy",
+    "sample"
   ],
-  "author": "niere",
+  "author": "Jun Rey Ansing",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/kahaPon/horoku-node-sample-niere/issues"
+    "url": "https://github.com/junreycloudstrife/heroku-sample/issues"
   },
-  "homepage": "https://github.com/kahaPon/horoku-node-sample-niere#readme",
+  "homepage": "https://github.com/junreycloudstrife/heroku-sample#readme",
   "engines": {
-    "node": "10.15"
-  },
-  "dependencies": {
-    "express": "^4.17.1",
-    "socket.io": "^2.3.0"
+    "node": "10.16"
   }
 }

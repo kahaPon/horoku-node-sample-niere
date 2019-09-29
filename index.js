@@ -15,21 +15,15 @@ app.get('/', function(req, res){
 
 io.sockets.on('connection', function(socket){
 	connections.push(socket);
-
-	socket.on('disconnect', function(data){
-		users.splice(users.indexOf(socket.username), 1);
-		updateUsernames();
-		connections.splice(connections.indexOf(socket) , 1);
-		
-	});
-
 	//send message
 	socket.on('send message',function(data){
+		console.log(data)
 		io.sockets.emit('new message' , {msg: data, user: socket.username});
 		console.log( socket.username);
 		
 	});
 
+	
 	socket.on('typing', function(username) {
 		socket.broadcast.emit('typing', username);
 	})
@@ -41,6 +35,15 @@ io.sockets.on('connection', function(socket){
 		users.push(socket.username);
 		updateUsernames();
 	});
+
+	socket.on('disconnect', function(data){
+		users.splice(users.indexOf(socket.username), 1);
+		updateUsernames();
+		connections.splice(connections.indexOf(socket) , 1);
+		
+	});
+
+
 
 	function updateUsernames(){
 		io.sockets.emit('get users', users);

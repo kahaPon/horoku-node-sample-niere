@@ -1,1 +1,1 @@
-# horoku-node-sample-niere
+# heroku-sample
